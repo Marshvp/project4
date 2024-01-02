@@ -16,7 +16,19 @@
             </div>
             </form>
         {% endif %}
-        <div class="all-posts">
+        <div class="all-posts" id="all-posts">
+
+        {% for post in all_posts reversed %}
+        
+            <div class="fake-post">
+                <h4>{{ post.user }}</h4>
+                <h5 class="mt-2">{{ post.content }}</h5>
+                {{ post.date }} <br>
+                <button class="btn btn-primary">Like Button</button>
+            </div>
+        
+        
+        {% endfor %}
             <div class="fake-post">
                 <h4>Username</h4>
                 <h5 class="mt-2">Content</h5>

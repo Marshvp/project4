@@ -5,12 +5,15 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import json
-
+import datetime
 from .models import User, Posts
 
 
 def index(request):
-    return render(request, "network/index.html")
+    all_posts = Posts.objects.all()
+    
+    print(all_posts)
+    return render(request, "network/index.html", {"all_posts": all_posts})
 
 
 def login_view(request):
@@ -74,11 +77,25 @@ def new_post(request):
     if request.method == "POST":
         user = request.user
         data = json.loads(request.body)
+        
         post_content = data.get("content")
+
+
         print(post_content, user)
 
         post = Posts.objects.create(user=user, content=post_content)
+        date = post.date.strftime('%Y-%m-%d %H:%M:%S')
         print("Hit the server")
-        return JsonResponse({"message": "Post sent successfully.", "post": post_content}, status=201)
+        return JsonResponse({"message": "Post sent successfully.", 
+                            "post": {
+                                "content": post_content,
+                                "user": user.username, 
+                                "date": date
+                             }
+                            }, status=201)
     else:
         return JsonResponse({"error": "POST request required."}, status = 400)
+    
+
+
+''''''

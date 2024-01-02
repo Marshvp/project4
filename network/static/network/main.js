@@ -34,8 +34,10 @@ function newpost(Event) {
     .then(result => {
         console.log("Post sent");
         if (!result.error){
+            console.log(result)
             console.log("SERVER MESSAGE: ", result.message)
             console.log("SERVER CONTENT: ", result.post)
+            add_new_post_to_page(result.post)
             document.querySelector('#newpost').value = "";
         } else {
         console.error("Error sending email:", result.error);
@@ -45,4 +47,19 @@ function newpost(Event) {
         console.error("Error in POST", error);
     });
 
+}
+
+function add_new_post_to_page (post) {
+
+    const postElement = document.createElement('div')
+    postElement.classList.add('fake-post')
+
+    postElement.innerHTML = `
+        <h4>${post.user}</h4>
+        <h5 class="mt-2">${post.content}</h5>
+        ${post.date}<br>
+        <button class="btn btn-primary">Like Button</button> `;
+    
+    
+    document.getElementById("all-posts").prepend(postElement);
 }
