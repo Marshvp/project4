@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const followBtn = document.getElementById('follow-btn');
         if (followBtn) {
-            followBtn.addEventListener('click', followbutton);
+            followBtn.addEventListener('click', () => {
+                followbutton(targetUserId)
+            });
         }
     }
 });
@@ -85,7 +87,7 @@ function isfollowing(targetUserId) {
     fetch(`/check_following/${targetUserId}`)
     .then(res => res.json())
     .then(data => {
-        console.log(data)
+        console.log("is following data: ", data)
         const followBtn = document.getElementById('follow-btn');
         if (data.is_following) {
             followBtn.innerHTML = 'Unfollow';
@@ -97,9 +99,24 @@ function isfollowing(targetUserId) {
     
 }
 
-function followbutton(){
-    fetch()
+function followbutton(targetUserId){
 
+    console.log("targetUserId from follow button: ", targetUserId)
 
-    isfollowing()
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const target_user_id = targetUserId
+
+    fetch(`/follow_unfollow/${target_user_id}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("followbutton data:", data)
+        isfollowing(target_user_id)
+    })
+    
 }

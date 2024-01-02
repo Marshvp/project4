@@ -122,8 +122,34 @@ def check_following(request, targetUserId):
     return JsonResponse({
                          "is_following": is_following
                          }, status=200)
+ 
 
-def follow_unfollow(request, targetUserId):
-    return
+@login_required
+def follow_unfollow(request, target_user_id):
+    
+    if request.method == 'POST':
+        # Ensure that the user is not trying to follow/unfollow themselves
+        if request.user.id == target_user_id:
+            return JsonResponse({"error": "Cannot follow/unfollow yourself"}, status=400)
+
+        targetUser = get_object_or_404(User, pk=target_user_id)
+        following_relation = Following.objects.filter(user_from=request.user, user_to=targetUser)
+
+        if following_relation.exists():
+            # User is already following, so unfollow
+            following_relation.delete()
+            action = "unfollowed"
+        else:
+            # User is not following, so follow
+            Following.objects.create(user_from=request.user, user_to=targetUser)
+            action = "followed"
+
+        return JsonResponse({"status": f"Successfully {action} {targetUser.username}"})
+    else:
+        print("WHY ARE YOU GETTING")
+
+    
+
+
 
 ''''''
