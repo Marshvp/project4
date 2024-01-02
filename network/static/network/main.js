@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function newpost(Event) {
     Event.preventDefault();
 
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     var post = document.querySelector('#newpost').value;
 
     if (post.length > 0) {
@@ -13,4 +14,35 @@ function newpost(Event) {
     } else {
         console.log("Nothing in the form")
     }
+
+    fetch('/new_post', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({
+            content: post
+        })
+        
+    })
+    .then(res => { if (!res.ok){
+        throw new Error(`HTTP error! Status: ${res.status}`);
+    };
+        return res.json();
+    })
+    .then(result => {
+        console.log("Post sent");
+        if (!result.error){
+            console.log("SERVER MESSAGE: ", result.message)
+            console.log("SERVER CONTENT: ", result.post)
+            document.querySelector('#newpost').value = "";
+        } else {
+        console.error("Error sending email:", result.error);
+        }
+    })
+    .catch(error => {
+        console.error("Error in POST", error);
+    });
+
 }

@@ -6,7 +6,9 @@
     <div class="container">
 
         {% if user.is_authenticated %}
+            
             <form id="new-post-form">
+                {% csrf_token %}
             <div class="new-post">
                 <h4>New Post</h4>
                 <textarea class="form-control mt-2" id="newpost" required></textarea>
