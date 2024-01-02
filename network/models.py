@@ -28,16 +28,3 @@ class Following(models.Model):
         return f'{self.user_from} follows {self.user_to}'
     
     
-'''
-class Posts()
-    user -- who made it - foreign key to user
-    content -- content of the post. max=140
-    date - datetime of made
-
-    def __str__(self)
-        return f"Made by {self.user} on {self.date}. Contents: {self.content}"
-    '''
-
-'''
-class Following()
-    '''

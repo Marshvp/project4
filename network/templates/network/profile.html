@@ -4,21 +4,37 @@
 
 {% block body %}
 
-<div class="container">
+<div class="container" id="profile-page" data-user-id="{{ targetUser.id }}">
 
     <div class="row">
         <div class="col-6" id="pro_username">
-            Username
+            <h1 class="m-5">{{ targetUser.username |capfirst }}</h1>
         </div>
         <div class="col-6" id="follow">
-            <div class="col-6" id="following">
-                following
+            <div class="col" id="following">
+                <h3 class="m-5">Following: </h3>
             </div>
-            <div class="col-6" id="followers">
-                followers
+            <div class="col" id="followers">
+                <h3 class="m-5">Followers: </h3>
+            </div>
+            <div class="col" id="followers">
+                <button class="btn btn-primary" id="follow-btn" style="margin-left: 45%;">Follow</button>
             </div>
         </div>
     </div>
+    {% for post in user_posts %}
+    
+    <div class="fake-post">
+        <h4><a href="{% url 'profile' post.user.id %}">{{ post.user }}</a></h4>
+        <h5 class="mt-2">{{ post.content }}</h5>
+        {{ post.date }} <br>
+        <button class="btn btn-primary">Like Button</button>
+    </div>
+    {% endfor %}
 </div>
 
+
 {% endblock body %}
+
+
+    

@@ -3,3 +3,8 @@
     padding: 10px;
     margin-bottom: 10px;
 }
+
+#follow-btn {
+    display:grid;
+    place-items: center;
+}

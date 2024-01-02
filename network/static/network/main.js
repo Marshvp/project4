@@ -1,8 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
-    try {
-    document.querySelector('#new-post-form').addEventListener('submit', newpost);
-    } catch (error) {
-        console.error(error);
+    if (document.getElementById('new-post-form')) {
+
+        document.querySelector('#new-post-form').addEventListener('submit', newpost);
+    }
+    if (document.getElementById('profile-page')) {
+        
+        const targetUserId = document.getElementById('profile-page').dataset.userId;
+        isfollowing(targetUserId);
+        
+        const followBtn = document.getElementById('follow-btn');
+        if (followBtn) {
+            followBtn.addEventListener('click', followbutton);
+        }
     }
 });
 
@@ -68,4 +77,29 @@ function add_new_post_to_page (post) {
     
     
     document.getElementById("all-posts").prepend(postElement);
+}
+
+
+function isfollowing(targetUserId) {
+    console.log("isfollowing called")
+    fetch(`/check_following/${targetUserId}`)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+        const followBtn = document.getElementById('follow-btn');
+        if (data.is_following) {
+            followBtn.innerHTML = 'Unfollow';
+        } else {
+            followBtn.innerHTML = 'Follow';
+        }
+            
+    })
+    
+}
+
+function followbutton(){
+    fetch()
+
+
+    isfollowing()
 }

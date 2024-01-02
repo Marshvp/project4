@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import json
 import datetime
-from .models import User, Posts
+from .models import User, Posts, Following
 
 
 def index(request):
@@ -100,8 +100,30 @@ def new_post(request):
 
 def profile(request, user_id):
 
-    user_id = user_id
+    targetUser = get_object_or_404(User, pk=user_id)
+    user_posts = Posts.objects.filter(user=targetUser)
+    
 
-    return render(request, "network/profile.html", {"user_id": user_id})
+    print(targetUser.id)
+
+    return render(request, "network/profile.html", {"targetUser": targetUser,
+                                                    "user_posts": user_posts})
+
+
+
+def check_following(request, targetUserId):
+
+    targetUser = get_object_or_404(User, pk=targetUserId)
+
+    is_following = Following.objects.filter(user_from=request.user, user_to=targetUser).exists()
+
+    print("is following check: ", is_following)
+
+    return JsonResponse({
+                         "is_following": is_following
+                         }, status=200)
+
+def follow_unfollow(request, targetUserId):
+    return
 
 ''''''
