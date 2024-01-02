@@ -84,12 +84,13 @@ def new_post(request):
         print(post_content, user)
 
         post = Posts.objects.create(user=user, content=post_content)
-        date = post.date.strftime('%Y-%m-%d %H:%M:%S')
+        date = post.date.strftime('%m-%d-%Y %H:%M:%S')
         print("Hit the server")
         return JsonResponse({"message": "Post sent successfully.", 
                             "post": {
                                 "content": post_content,
                                 "user": user.username, 
+                                "user_id": user.id,
                                 "date": date
                              }
                             }, status=201)
@@ -97,5 +98,10 @@ def new_post(request):
         return JsonResponse({"error": "POST request required."}, status = 400)
     
 
+def profile(request, user_id):
+
+    user_id = user_id
+
+    return render(request, "network/profile.html", {"user_id": user_id})
 
 ''''''

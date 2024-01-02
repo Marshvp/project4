@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
+    try {
     document.querySelector('#new-post-form').addEventListener('submit', newpost);
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 
@@ -54,8 +58,10 @@ function add_new_post_to_page (post) {
     const postElement = document.createElement('div')
     postElement.classList.add('fake-post')
 
+    const profileUrl = `/profile/${post.user_id}/`
+
     postElement.innerHTML = `
-        <h4>${post.user}</h4>
+        <h4><a href="${profileUrl}">${post.user}</a></h4>
         <h5 class="mt-2">${post.content}</h5>
         ${post.date}<br>
         <button class="btn btn-primary">Like Button</button> `;
