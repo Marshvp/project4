@@ -1,0 +1,48 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+
+
+<div class="container mt-5">
+    {% for post in posts %}
+        
+            <div class="fake-post">
+                <h4><a href="{% url 'profile' post.user.id %}">{{ post.user }}</a></h4>
+                <h5 class="mt-2">{{ post.content }}</h5>
+                {{ post.date }} <br>
+                <button class="btn btn-primary">Like Button</button>
+            </div>
+        
+        
+        {% endfor %}
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if posts.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a></li>
+                {% endif %}
+    
+                    <!-- <li class="page-item"><a class="page-link disabled" href="#">Page {{ posts.number }} of {{ posts.paginator.num_pages }}</a></li> -->
+    
+                    {% for i in nums %}
+                        <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}"> {{ forloop.counter }} </a></li>
+                    {% endfor %}
+    
+                {% if posts.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ posts.paginator.num_pages }}">Last &raquo</a></li>
+                {% endif %}
+            </ul>
+            </nav>
+</div>
+
+
+
+
+
+
+
+
+
+{% endblock body %}

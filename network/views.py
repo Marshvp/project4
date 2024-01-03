@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 
 
 def index(request):
-    all_posts = Posts.objects.all()
+    all_posts = Posts.objects.all().order_by("-id")
     p = Paginator(all_posts, 3)
     
     page = request.GET.get('page')
@@ -156,7 +156,24 @@ def follow_unfollow(request, target_user_id):
         print("WHY ARE YOU GETTING")
 
     
+@login_required
+def follow_page(request):
 
+    user = request.user
+
+    following_users = Following.objects.filter(user_from=request.user).values_list('user_to', flat=True)
+
+    fposts = Posts.objects.filter(user__in=following_users).order_by('-date')
+    p = Paginator(fposts, 5)
+
+    
+    page = request.GET.get('page')
+    posts = p.get_page(page)
+    nums = "a" * posts.paginator.num_pages
+
+    print("Following users: ", following_users)
+    print("Posts: ", posts)
+    return render(request, 'network/following.html', {"posts": posts, "nums": nums})
 
 
 ''''''
