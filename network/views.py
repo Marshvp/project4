@@ -12,14 +12,15 @@ from django.core.paginator import Paginator
 
 def index(request):
     all_posts = Posts.objects.all()
-    p = Paginator(all_posts, 2)
+    p = Paginator(all_posts, 3)
     
     page = request.GET.get('page')
     posts = p.get_page(page)
+    nums = "a" * posts.paginator.num_pages
 
 
     print(posts)
-    return render(request, "network/index.html", {"posts": posts})
+    return render(request, "network/index.html", {"posts": posts, "nums": nums})
 
 
 def login_view(request):

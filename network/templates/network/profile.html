@@ -24,7 +24,7 @@
             </div>
         </div>
     </div>
-    {% for post in user_posts %}
+    {% for post in user_posts reversed %}
     
     <div class="fake-post">
         <h4><a href="{% url 'profile' post.user.id %}">{{ post.user }}</a></h4>
