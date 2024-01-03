@@ -1,3 +1,5 @@
+let currentEditingPostId = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('new-post-form')) {
 
@@ -28,7 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
         loadeditModel(postId);
     });
 
-    
+    const editSaveButton = document.getElementById('editSave');
+    if (editSaveButton) {
+        editSaveButton.addEventListener('click', function() {
+            if (currentEditingPostId) {
+                saveChanges(currentEditingPostId);
+            }
+        });
+    }
+
+    const hitsave = this.getElementById('')
 });
 
 
@@ -140,13 +151,46 @@ function loadeditModel(postId) {
     
     console.log("Hello World")
 
+    const pId = postId
+
     fetch(`/editModeldata/${postId}`)
         .then(res => res.json())
         .then(data => {
             console.log(data)
             console.log(data.content)
             document.getElementById('editModal-textarea').value = data.content;
+            currentEditingPostId = postId;
         })
         .catch(error => console.error('Error', error));
 
+    
+}
+
+function saveChanges(postId, updatedContent, event) {
+    event.preventDefault()
+
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const newContent = updatedContent
+
+    fetch(`/editModeldata/${postId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({ content: newContent })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Post updated:', data);
+        
+    })
+    .catch(error => {
+        console.error('Error updating post:', error);
+    });
 }

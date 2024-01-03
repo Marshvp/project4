@@ -19,7 +19,7 @@ def index(request):
     nums = "a" * posts.paginator.num_pages
 
 
-    print(posts)
+    #print(posts)
     return render(request, "network/index.html", {"posts": posts, "nums": nums})
 
 
@@ -115,7 +115,7 @@ def profile(request, user_id):
     user_posts = p.get_page(page)
     nums = "a" * user_posts.paginator.num_pages
 
-    print(targetUser.id)
+    #print(targetUser.id)
 
     return render(request, "network/profile.html", {"targetUser": targetUser,
                                                     "user_posts": user_posts})
@@ -128,7 +128,7 @@ def check_following(request, targetUserId):
 
     is_following = Following.objects.filter(user_from=request.user, user_to=targetUser).exists()
 
-    print("is following check: ", is_following)
+    #print("is following check: ", is_following)
 
     return JsonResponse({
                          "is_following": is_following
@@ -157,7 +157,7 @@ def follow_unfollow(request, target_user_id):
 
         return JsonResponse({"status": f"Successfully {action} {targetUser.username}"})
     else:
-        print("WHY ARE YOU GETTING")
+        print("WHY ARE YOU GETTING unfollow")
 
     
 @login_required
@@ -175,15 +175,29 @@ def follow_page(request):
     posts = p.get_page(page)
     nums = "a" * posts.paginator.num_pages
 
-    print("Following users: ", following_users)
-    print("Posts: ", posts)
+    #print("Following users: ", following_users)
+    #print("Posts: ", posts)
     return render(request, 'network/following.html', {"posts": posts, "nums": nums})
 
 
 @login_required
 def editModeldata(request, postId):
 
+    print(postId)
     post = get_object_or_404(Posts, pk=postId)
+    if request.method == "POST":
+
+        data = json.loads(request.body)
+        print(data)
+        updated_content = data.get('content', '')
+
+        post.content = updated_content
+        post.save
+
+        return JsonResponse({"status": "success", "message": "Post updated"})
+
+
+    
     print(post.content)
     return JsonResponse({"content": post.content})
 ''''''
