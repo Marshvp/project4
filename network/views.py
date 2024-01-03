@@ -7,13 +7,19 @@ from django.contrib.auth.decorators import login_required
 import json
 import datetime
 from .models import User, Posts, Following
+from django.core.paginator import Paginator
 
 
 def index(request):
     all_posts = Posts.objects.all()
+    p = Paginator(all_posts, 2)
     
-    print(all_posts)
-    return render(request, "network/index.html", {"all_posts": all_posts})
+    page = request.GET.get('page')
+    posts = p.get_page(page)
+
+
+    print(posts)
+    return render(request, "network/index.html", {"posts": posts})
 
 
 def login_view(request):

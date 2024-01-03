@@ -18,7 +18,7 @@
         {% endif %}
         <div class="all-posts" id="all-posts">
 
-        {% for post in all_posts reversed %}
+        {% for post in posts reversed %}
         
             <div class="fake-post">
                 <h4><a href="{% url 'profile' post.user.id %}">{{ post.user }}</a></h4>
@@ -29,7 +29,7 @@
         
         
         {% endfor %}
-            <div class="fake-post">
+           <!-- <div class="fake-post">
                 <h4>Username</h4>
                 <h5 class="mt-2">Content</h5>
                 Date time created <br>
@@ -50,7 +50,29 @@
                 Date time created <br>
                 Like Button
 
-            </div>
+            </div> -->
         </div>
+
+        <br>
+
+        <hr> <br><br>
+        {% if posts.has_previous %}
+            <a href="?page=1">&laquo</a>
+            <a href="?page={{ posts.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">Next</a>
+            <a href="?page={{ posts.paginator.num_pages }}">&raquo</a>
+        {% endif %}
+        <br><br>
+        {{ posts }} <br>
+        Has Previous {{ posts.has_previous}}
+        <br>
+        Has next {{ posts.has_next }} <br>
+        Current Page {{ posts.number }} <br>
+        Number of pages {{ posts.paginator.num_pages }}
     </div>
 {% endblock %}
