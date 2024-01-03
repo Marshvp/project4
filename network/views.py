@@ -108,8 +108,12 @@ def new_post(request):
 def profile(request, user_id):
 
     targetUser = get_object_or_404(User, pk=user_id)
-    user_posts = Posts.objects.filter(user=targetUser)
-    
+    target_posts = Posts.objects.filter(user=targetUser)
+    p = Paginator(target_posts, 5)
+
+    page = request.GET.get('page')
+    user_posts = p.get_page(page)
+    nums = "a" * user_posts.paginator.num_pages
 
     print(targetUser.id)
 
@@ -166,7 +170,7 @@ def follow_page(request):
     fposts = Posts.objects.filter(user__in=following_users).order_by('-date')
     p = Paginator(fposts, 5)
 
-    
+
     page = request.GET.get('page')
     posts = p.get_page(page)
     nums = "a" * posts.paginator.num_pages
@@ -176,4 +180,10 @@ def follow_page(request):
     return render(request, 'network/following.html', {"posts": posts, "nums": nums})
 
 
+@login_required
+def editModeldata(request, postId):
+
+    post = get_object_or_404(Posts, pk=postId)
+    print(post.content)
+    return JsonResponse({"content": post.content})
 ''''''

@@ -24,6 +24,9 @@
                 <h4><a href="{% url 'profile' post.user.id %}">{{ post.user }}</a></h4>
                 <h5 class="mt-2">{{ post.content }}</h5>
                 {{ post.date }} <br>
+                {% if user == post.user %}
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-post-id="{{ post.id }}" id="editbutton">Edit</button>
+                {% endif %}
                 <button class="btn btn-primary">Like Button</button>
             </div>
         
@@ -54,6 +57,23 @@
         </div>
 
         <br>
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModelLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="editModelLabel">Edit Post</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="editModal-body">
+                    <textarea id="editModal-textarea" class="form-control"></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
         <hr>

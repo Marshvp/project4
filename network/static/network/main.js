@@ -15,7 +15,22 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
+
+    const editButtons = document.querySelectorAll('[data-bs-target="#editModel"]');
+    if (editButtons){
+        console.log("hittiing editButtons")
+    }
+    
+    document.getElementById('editbutton').addEventListener('click', function () {
+            
+        const postId = this.getAttribute('data-post-id');
+        console.log(postId)
+        loadeditModel(postId);
+    });
+
+    
 });
+
 
 
 function newpost(Event) {
@@ -119,4 +134,19 @@ function followbutton(targetUserId){
         isfollowing(target_user_id)
     })
     
+}
+
+function loadeditModel(postId) {
+    
+    console.log("Hello World")
+
+    fetch(`/editModeldata/${postId}`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            console.log(data.content)
+            document.getElementById('editModal-textarea').value = data.content;
+        })
+        .catch(error => console.error('Error', error));
+
 }
