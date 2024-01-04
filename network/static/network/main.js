@@ -18,28 +18,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    const editButtons = document.querySelectorAll('[data-bs-target="#editModel"]');
+    const editButtons = document.querySelectorAll('[data-bs-target="#editModal"]');
     if (editButtons){
         console.log("hittiing editButtons")
     }
     
-    document.getElementById('editbutton').addEventListener('click', function () {
-            
-        const postId = this.getAttribute('data-post-id');
-        console.log(postId)
-        loadeditModel(postId);
+    document.querySelectorAll('.edit-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            // Set the onclick attribute of the save button with the postId
+            document.getElementById('editSave').setAttribute('onclick', `saveChanges(${postId})`);
+            console.log("Editing post ID:", postId);
+            loadeditModal(postId);
+        });
     });
 
-    const editSaveButton = document.getElementById('editSave');
-    if (editSaveButton) {
-        editSaveButton.addEventListener('click', function() {
-            if (currentEditingPostId) {
-                saveChanges(currentEditingPostId);
-            }
-        });
-    }
-
-    const hitsave = this.getElementById('')
 });
 
 
@@ -147,13 +140,13 @@ function followbutton(targetUserId){
     
 }
 
-function loadeditModel(postId) {
+function loadeditModal(postId) {
     
     console.log("Hello World")
 
     const pId = postId
 
-    fetch(`/editModeldata/${postId}`)
+    fetch(`/editModaldata/${postId}`)
         .then(res => res.json())
         .then(data => {
             console.log(data)
@@ -166,31 +159,10 @@ function loadeditModel(postId) {
     
 }
 
-function saveChanges(postId, updatedContent, event) {
-    event.preventDefault()
-
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    const newContent = updatedContent
-
-    fetch(`/editModeldata/${postId}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken
-        },
-        body: JSON.stringify({ content: newContent })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Post updated:', data);
-        
-    })
-    .catch(error => {
-        console.error('Error updating post:', error);
-    });
+function closeModal() {
+    const editModalElement = document.getElementById('editModal');
+    const editModal = bootstrap.Modal.getInstance(editModalElement);
+    if (editModal) {
+        editModal.hide();
+    }
 }

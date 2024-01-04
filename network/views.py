@@ -181,23 +181,22 @@ def follow_page(request):
 
 
 @login_required
-def editModeldata(request, postId):
+def editModaldata(request, postId):
 
-    print(postId)
+    print("Id GET: ", postId)
     post = get_object_or_404(Posts, pk=postId)
-    if request.method == "POST":
-
-        data = json.loads(request.body)
-        print(data)
-        updated_content = data.get('content', '')
-
-        post.content = updated_content
-        post.save
-
-        return JsonResponse({"status": "success", "message": "Post updated"})
-
-
-    
     print(post.content)
     return JsonResponse({"content": post.content})
+
+
+
+@login_required
+def saveEdit(request, postId):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        editedPost = Posts.objects.get(pk=postId)
+        editedPost.content = data["content"]
+        editedPost.save()
+
+        return JsonResponse({"message": "Save successfull", "data": data["content"]})
 ''''''

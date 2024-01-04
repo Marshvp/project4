@@ -2,6 +2,51 @@
 
 {% block body %}
     TODO
+    <script>
+
+        function getCookie(name){
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if(parts.length == 2) return parts.pop().split(';').shift();
+        }
+
+
+
+        function saveChanges(id) {
+    
+            
+            const updatedText = document.getElementById('editModal-textarea').value;
+            console.log(updatedText)
+            console.log(id)
+        
+            fetch(`/saveEdit/${id}`,{
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie("csrftoken")
+                },
+                body: JSON.stringify({
+                    content: updatedText
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                closeModal(); 
+
+                const updatedText = document.getElementById('editModal-textarea').value;
+                const contentElement = document.getElementById(`post-content-${id}`);
+                if (contentElement) {
+                    contentElement.textContent = updatedText;
+                }
+            })
+            .catch(error => {
+                console.error('Error updating post:', error);
+            });
+            
+        }
+    </script>
+    
 
     <div class="container">
 
@@ -22,10 +67,10 @@
         
             <div class="fake-post">
                 <h4><a href="{% url 'profile' post.user.id %}">{{ post.user }}</a></h4>
-                <h5 class="mt-2">{{ post.content }}</h5>
+                <h5 class="mt-2" id="post-content-{{ post.id }}">{{ post.content }}</h5>
                 {{ post.date }} <br>
                 {% if user == post.user %}
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-post-id="{{ post.id }}" id="editbutton">Edit</button>
+                <button type="button" class="btn btn-primary edit-button" data-bs-toggle="modal" data-bs-target="#editModal" data-post-id="{{ post.id }}" id="editbutton">Edit</button>
                 {% endif %}
                 <button class="btn btn-primary">Like Button</button>
             </div>
@@ -57,24 +102,21 @@
         </div>
 
         <br>
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModelLabel" aria-hidden="true">
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="editModelLabel">Edit Post</h1>
+                  <h1 class="modal-title fs-5" id="editModalLabel">Edit Post</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form>
-                    {% csrf_token %}
+                
                 <div class="modal-body" id="editModal-body">
                     <textarea id="editModal-textarea" class="form-control"></textarea>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                
-                    
-                    <button type="submit" class="btn btn-primary saveEdit" id="editSave">Save changes</button>
-                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> 
+                <button type="button" class="btn btn-primary saveEdit" id="editSave" onclick="saveChanges({{ post.id }})">Save changes</button>
+               
                 </div>
               </div>
             </div>

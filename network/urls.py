@@ -13,5 +13,6 @@ urlpatterns = [
     path("check_following/<int:targetUserId>/", views.check_following, name="check_following"),
     path('follow_unfollow/<int:target_user_id>/', views.follow_unfollow, name='follow_unfollow'),
     path('following/', views.follow_page, name='following_page'),
-    path('editModeldata/<int:postId>/', views.editModeldata, name="editModeldata")
+    path('editModaldata/<int:postId>/', views.editModaldata, name="editModaldata"),
+    path('saveEdit/<int:postId>', views.saveEdit, name="saveEdit")
 ]
