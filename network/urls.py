@@ -14,5 +14,6 @@ urlpatterns = [
     path('follow_unfollow/<int:target_user_id>/', views.follow_unfollow, name='follow_unfollow'),
     path('following/', views.follow_page, name='following_page'),
     path('editModaldata/<int:postId>/', views.editModaldata, name="editModaldata"),
-    path('saveEdit/<int:postId>', views.saveEdit, name="saveEdit")
+    path('saveEdit/<int:postId>', views.saveEdit, name="saveEdit"),
+    path('toggle_like/<int:post_id>', views.toggle_like, name='toggle_like')
 ]

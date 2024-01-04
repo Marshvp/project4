@@ -9,7 +9,9 @@ class Posts(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.CharField(max_length=140)
     date = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
 
+    
     def __str__(self):
         return f"Made by {self.user} on {self.date}. Contents: {self.content}"
 

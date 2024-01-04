@@ -73,6 +73,9 @@
                 <button type="button" class="btn btn-primary edit-button" data-bs-toggle="modal" data-bs-target="#editModal" data-post-id="{{ post.id }}" id="editbutton">Edit</button>
                 {% endif %}
                 <button class="btn btn-primary">Like Button</button>
+                <button class="like-button btn btn-primary" data-post-id="{{ post.id }}">
+                    <span id="like-count-{{ post.id }}">{{ post.likes.count }}</span> Likes
+                </button>
             </div>
         
         

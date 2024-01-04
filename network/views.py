@@ -199,4 +199,22 @@ def saveEdit(request, postId):
         editedPost.save()
 
         return JsonResponse({"message": "Save successfull", "data": data["content"]})
+    
+
+def toggle_like(request, post_id):
+
+    post = get_object_or_404(Posts, pk=post_id)
+    user = request.user
+
+    if request.method == 'POST':
+
+        if user in post.likes.all():
+            post.likes.remove(user)
+            liked = False
+        else:
+            post.likes.add(user)
+            liked = True
+
+        return JsonResponse({'liked': liked, 'total_likes': post.likes.count()})
+    return JsonResponse({"message": "Needs to be post"})
 ''''''
